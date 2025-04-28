@@ -4,7 +4,7 @@ from src.constants import Statues
 from src.schema.base import BaseSchema
 
 
-class OrgSchema(BaseSchema):
+class DealSchema(BaseSchema):
     name: str
     status: Statues = Statues.ACTIVE.value
     domain: Optional[str] = None

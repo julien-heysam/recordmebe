@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Float, ForeignKey, JSONB, String
+from sqlalchemy import Column, Float, ForeignKey, String
+from sqlalchemy.dialects.postgresql import JSONB
 
 from src.db.db import Base
 from src.db.base import BaseColumns

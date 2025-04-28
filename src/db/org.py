@@ -11,4 +11,4 @@ class OrgTable(BaseColumns, Base):
 
     name = Column(String)
     status = Column(String)
-    domains = Column(String, nullable=True)
+    domain = Column(String, nullable=True)
