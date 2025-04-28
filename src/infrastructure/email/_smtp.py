@@ -1,8 +1,8 @@
 import logging
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from src import PROJECT_ENVS
 from src.infrastructure.email.base import EmailManager, EmailMessage
@@ -35,7 +35,7 @@ class EmailSMTP(EmailManager):
                     attachment.add_header(
                         "Content-Disposition",
                         "attachment",
-                        filename=message.attachment_path.name
+                        filename=message.attachment_path.name,
                     )
                     mime_message.attach(attachment)
             elif message.attachment_path:
@@ -54,6 +54,6 @@ class EmailSMTP(EmailManager):
             logger.error(
                 "Failed to send email",
                 extra={"error": str(e), "message": message.to_dict()},
-                exc_info=PROJECT_ENVS.DEBUG
+                exc_info=PROJECT_ENVS.DEBUG,
             )
             return False

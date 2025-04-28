@@ -1,5 +1,5 @@
-from typing import Type, Dict
 import logging
+from typing import Dict, Type
 
 logger = logging.getLogger(__name__)
 
@@ -10,6 +10,7 @@ class FactoryError(Exception):
 
 class FactoryRegistry:
     """Registry to maintain factory mappings."""
+
     _factories: Dict[str, Dict[Type, Type]] = {}
 
     @classmethod
@@ -25,7 +26,9 @@ class FactoryRegistry:
         try:
             return cls._factories[category][model_type]
         except KeyError:
-            raise FactoryError(f"No factory registered for category '{category}' and model type '{model_type.__name__}'")
+            raise FactoryError(
+                f"No factory registered for category '{category}' and model type '{model_type.__name__}'"
+            )
 
 
 factories = FactoryRegistry()

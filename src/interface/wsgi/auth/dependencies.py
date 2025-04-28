@@ -93,7 +93,11 @@ class Authenticator:
             f"token validated during / m2m_auth / url:{str(request.url)}, self.email:{self.email} / self.org_name:{self.org_name}"
         )
 
-    def __call__(self, request: Request, token: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+    def __call__(
+        self,
+        request: Request,
+        token: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+    ):
         if PROJECT_ENVS.ENV_STATE == Envs.LOCAL.value:
             self.dummy_auth(request=request, token=token)
         else:

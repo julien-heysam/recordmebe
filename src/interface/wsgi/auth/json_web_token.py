@@ -41,7 +41,11 @@ class JsonWebToken:
             )
             payload["access_token"] = self.jwt_access_token
         except jwt.exceptions.PyJWKClientError as e:
-            logger.error(f"PyJWKClientError: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                f"PyJWKClientError: {e}",
+                extra={"error": e},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             raise UnableCredentialsException
         except jwt.ExpiredSignatureError as e:
             logger.error(f"Token expired: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
@@ -50,7 +54,11 @@ class JsonWebToken:
             logger.error(f"Bad credentials: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
             raise e
         except Exception as e:
-            logger.error(f"Unknown jwt validation error: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                f"Unknown jwt validation error: {e}",
+                extra={"error": e},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             raise e
 
         return payload

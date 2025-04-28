@@ -47,6 +47,7 @@ class TextUtils:
     @staticmethod
     def dict_to_string(data: dict) -> str:
         """Convert a dictionary to a formatted string representation."""
+
         def format_value(value: Union[list, dict, str]) -> str:
             if isinstance(value, list):
                 return f"[{', '.join(format_value(item) for item in value)}]"

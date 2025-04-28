@@ -1,5 +1,5 @@
 import logging
- 
+
 import requests
 from requests.exceptions import RequestException
 
@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class EmailMailgun(EmailManager):
-
     def __init__(self, api_key: str, domain: str):
         self.api_key = api_key
         self.domain = domain
@@ -37,5 +36,9 @@ class EmailMailgun(EmailManager):
             return True
 
         except RequestException as e:
-            logger.error("Failed to send email", extra={"error": str(e), "message": message.to_dict()}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                "Failed to send email",
+                extra={"error": str(e), "message": message.to_dict()},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             return False

@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
@@ -34,9 +34,7 @@ def get(user_id: Optional[str] = None, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
-@user_route.post(
-    "/", response_model=UserSchema, response_description="Create a new user"
-)
+@user_route.post("/", response_model=UserSchema, response_description="Create a new user")
 def post(model: UserSchema, db: Session = Depends(get_db)):
     try:
         return UserRepository(db).upsert(data=model)
@@ -51,7 +49,10 @@ def delete(user_id: Optional[str] = None, db: Session = Depends(get_db)):
         result = UserRepository(db).delete(_id=user_id)
         if not result:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-        return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": "User deleted successfully"})
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"detail": "User deleted successfully"},
+        )
     except Exception as e:
         logger.error(f"Error deleting user with ID {user_id}: {e}", exc_info=PROJECT_ENVS.DEBUG)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

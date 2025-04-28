@@ -3,7 +3,7 @@ import signal
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from threading import Event
-from typing import Optional, List
+from typing import List, Optional
 from urllib.request import Request, urlopen
 
 from rich.progress import (
@@ -16,10 +16,11 @@ from rich.progress import (
     TransferSpeedColumn,
 )
 
+
 class DownloadUtils:
     def __init__(self, max_workers: int = 4):
         """Initialize the download manager.
-        
+
         Args:
             max_workers: Maximum number of concurrent downloads
         """
@@ -36,7 +37,7 @@ class DownloadUtils:
         )
         self.done_event = Event()
         self.max_workers = max_workers
-        
+
         # Setup signal handler
         signal.signal(signal.SIGINT, self._handle_sigint)
 
@@ -51,29 +52,29 @@ class DownloadUtils:
             request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
             response = urlopen(request)
             total_size = int(response.info()["Content-Length"])
-            
+
             if task_id is not None:
                 self.progress.update(task_id, total=total_size)
-                
+
             with open(path, "wb") as dest_file:
                 if task_id is not None:
                     self.progress.start_task(task_id)
-                    
+
                 for data in iter(partial(response.read, 32768), b""):
                     dest_file.write(data)
                     if task_id is not None:
                         self.progress.update(task_id, advance=len(data))
                     if self.done_event.is_set():
                         return
-                        
+
             self.progress.console.log(f"Downloaded {path}")
-            
+
         except Exception as e:
             self.progress.console.log(f"Failed to download {url}: {e}")
 
     def download_urls(self, urls: List[str], dest_dir: str) -> None:
         """Download multiple files to the given directory.
-        
+
         Args:
             urls: List of URLs to download
             dest_dir: Destination directory for downloaded files

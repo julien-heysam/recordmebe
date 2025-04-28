@@ -21,7 +21,13 @@ class RecordingSchema(BaseSchema):
 
 
 if __name__ == "__main__":
-    recording = RecordingSchema(org_id="org_1", url="https://www.google.com", title="Test Recording", description="Test Description", participants=["test@test.com"])
+    recording = RecordingSchema(
+        org_id="org_1",
+        url="https://www.google.com",
+        title="Test Recording",
+        description="Test Description",
+        participants=["test@test.com"],
+    )
     print(recording)
     # Expected output:
     # id='46122b30-2e4d-5e5a-8fdf-2f662bd5da84' meta={} created_at=None updated_at=None org_id='org_1' url='https://www.google.com' title='Test Recording' description='Test Description' participants=['test@test.com'] video_path=None duration=None

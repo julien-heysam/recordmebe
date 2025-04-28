@@ -18,4 +18,7 @@ class BadCredentialsException(HTTPException):
 
 class RequiredOrganizationException(HTTPException):
     def __init__(self):
-        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail="Unable to verify organization")
+        super().__init__(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Unable to verify organization",
+        )

@@ -21,7 +21,11 @@ deal_route = APIRouter(
 logger = logging.getLogger(__name__)
 
 
-@deal_route.get("/{deal_id}", response_model=DealSchema, response_description="Retrieve a deal by ID")
+@deal_route.get(
+    "/{deal_id}",
+    response_model=DealSchema,
+    response_description="Retrieve a deal by ID",
+)
 def get(deal_id: str, db: Session = Depends(get_db)):
     try:
         deal = DealRepository(db).read(_id=deal_id)
@@ -33,9 +37,7 @@ def get(deal_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
-@deal_route.post(
-    "/", response_model=DealSchema, response_description="Create a new deal"
-)
+@deal_route.post("/", response_model=DealSchema, response_description="Create a new deal")
 def post(model: DealSchema, db: Session = Depends(get_db)):
     try:
         return DealRepository(db).upsert(data=model)
@@ -50,7 +52,10 @@ def delete(deal_id: str, db: Session = Depends(get_db)):
         result = DealRepository(db).delete(_id=deal_id)
         if not result:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Deal not found")
-        return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": "Deal deleted successfully"})
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"detail": "Deal deleted successfully"},
+        )
     except Exception as e:
         logger.error(f"Error deleting deal with ID {deal_id}: {e}", exc_info=PROJECT_ENVS.DEBUG)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

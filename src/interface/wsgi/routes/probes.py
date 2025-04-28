@@ -31,7 +31,10 @@ def get_startup(request: Request):
         return JSONResponse(content={"status": "OK"}, status_code=status.HTTP_200_OK)
     except Exception as e:
         logger.warning(f"Startup incomplete: {e}")
-        return JSONResponse(content={"status": "Service Unavailable"}, status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
+        return JSONResponse(
+            content={"status": "Service Unavailable"},
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
 
 
 @probes_route.get("/readiness", response_description="Readiness probe")
@@ -50,4 +53,7 @@ def get_readiness(request: Request):
             return JSONResponse(content={"status": "Too Early"}, status_code=status.HTTP_425_TOO_EARLY)
     except Exception as e:
         logger.warning(f"Readiness check failed: {e}")
-        return JSONResponse(content={"status": "Service Unavailable"}, status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
+        return JSONResponse(
+            content={"status": "Service Unavailable"},
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )

@@ -7,22 +7,16 @@ from threading import Event
 import boto3
 import requests
 from botocore.exceptions import ClientError
-from rich.progress import (
-    BarColumn, 
-    DownloadColumn, 
-    Progress, 
-    TextColumn, 
-    TimeRemainingColumn, 
-    TransferSpeedColumn
-)
+from rich.progress import BarColumn, DownloadColumn, Progress, TextColumn, TimeRemainingColumn, TransferSpeedColumn
 
 from src import logging
 
 logger = logging.getLogger(__name__)
 
+
 class AWSUtils:
     """Manages AWS operations including S3, Secrets Manager, and SSM Parameter Store."""
-    
+
     def __init__(self, region: str = "us-east-1", account_id: str = "641949442254"):
         self.region = region
         self.account_id = account_id
@@ -38,7 +32,7 @@ class AWSUtils:
             TimeRemainingColumn(),
         )
         self.done_event = Event()
-        
+
         # Initialize AWS clients
         self.s3_client = boto3.client("s3", region_name=self.region)
         self.s3_resource = boto3.resource("s3", region_name=self.region)
@@ -52,7 +46,7 @@ class AWSUtils:
             path = os.path.join(dest_dir, file)
             task_id = self.progress.add_task("download", filename=file, start=False)
             self.progress.console.log(f"Starting download for s3://{bucket}/{filename}")
-            
+
             try:
                 total_size = self.s3_client.head_object(Bucket=bucket, Key=filename)["ContentLength"]
                 if task_id is not None:
@@ -69,7 +63,7 @@ class AWSUtils:
                         Bucket=bucket,
                         Key=filename,
                         Fileobj=dest_file,
-                        Callback=download_chunk
+                        Callback=download_chunk,
                     )
                     if self.done_event.is_set():
                         return
@@ -79,28 +73,17 @@ class AWSUtils:
 
     async def upload_file_s3(self, bucket: str, filename: str, path: str | Path) -> str:
         """Upload a local file to S3."""
-        self.s3_resource.meta.client.upload_file(
-            Bucket=bucket,
-            Key=filename,
-            Filename=str(path)
-        )
+        self.s3_resource.meta.client.upload_file(Bucket=bucket, Key=filename, Filename=str(path))
         return f"s3://{bucket}/{filename}"
 
     async def upload_stream_file_s3(
-        self,
-        bucket: str,
-        filename: str,
-        url: str,
-        content_type: str = "video/mp4"
+        self, bucket: str, filename: str, url: str, content_type: str = "video/mp4"
     ) -> None:
         """Upload a file to S3 from a URL stream."""
         logger.info(f"Uploading file:{filename} to s3:{url}")
         with closing(requests.get(url, stream=True)) as r:
             self.s3_resource.meta.client.upload_fileobj(
-                r.raw,
-                bucket,
-                filename,
-                ExtraArgs={"ContentType": content_type}
+                r.raw, bucket, filename, ExtraArgs={"ContentType": content_type}
             )
 
     def get_aws_secret(self, secret_name: str) -> dict:
@@ -120,9 +103,7 @@ class AWSUtils:
         """Create a secret in AWS Secrets Manager."""
         try:
             response = self.secrets_client.create_secret(
-                Name=secret_name,
-                SecretString=secret_value,
-                Description=description
+                Name=secret_name, SecretString=secret_value, Description=description
             )
             logger.info(f"Secret created: {response['ARN']}")
         except ClientError as e:
@@ -133,7 +114,7 @@ class AWSUtils:
         name: str,
         value: str,
         description: str = None,
-        param_type: str = "SecureString"
+        param_type: str = "SecureString",
     ) -> None:
         """Create or update a parameter in AWS SSM Parameter Store."""
         if not name.startswith("/"):
@@ -145,7 +126,7 @@ class AWSUtils:
                 Value=value,
                 Description=description,
                 Type=param_type,
-                Overwrite=True
+                Overwrite=True,
             )
             logger.info(f"Parameter created/updated parameter:{name} version:{response['Version']}")
         except ClientError as e:
@@ -157,10 +138,7 @@ class AWSUtils:
             name = f"arn:aws:ssm:{self.region}:{self.account_id}:parameter/prod/{name.lower()}"
 
         try:
-            response = self.ssm_client.get_parameter(
-                Name=name,
-                WithDecryption=with_decryption
-            )
+            response = self.ssm_client.get_parameter(Name=name, WithDecryption=with_decryption)
             value = response["Parameter"]["Value"]
             logger.info(value)
             return value

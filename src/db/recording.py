@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Float, ForeignKey, String
 from sqlalchemy.dialects.postgresql import JSONB
 
-from src.db.db import Base
 from src.db.base import BaseColumns
+from src.db.db import Base
 
 
 class RecordingTable(BaseColumns, Base):

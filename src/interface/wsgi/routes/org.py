@@ -1,7 +1,6 @@
 import logging
-from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
@@ -34,9 +33,7 @@ def get(org_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
-@org_route.post(
-    "/", response_model=OrgSchema, response_description="Create a new org"
-)
+@org_route.post("/", response_model=OrgSchema, response_description="Create a new org")
 def post(model: OrgSchema, db: Session = Depends(get_db)):
     try:
         return OrgRepository(db).upsert(data=model)
@@ -51,7 +48,10 @@ def delete(org_id: str, db: Session = Depends(get_db)):
         result = OrgRepository(db).delete(_id=org_id)
         if not result:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Org not found")
-        return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": "Org deleted successfully"})
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"detail": "Org deleted successfully"},
+        )
     except Exception as e:
         logger.error(f"Error deleting org with ID {org_id}: {e}", exc_info=PROJECT_ENVS.DEBUG)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

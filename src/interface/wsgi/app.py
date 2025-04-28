@@ -2,7 +2,6 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
-# from fastapi_pagination import add_pagination as setup_pagination
 
 from src import PROJECT_ENVS
 from src.constants import Envs
@@ -10,6 +9,9 @@ from src.interface.wsgi.middlewares.setup import setup_middleware
 from src.interface.wsgi.routes.probes import probes_route
 from src.interface.wsgi.routes.user import user_route
 from src.interface.wsgi.setup import setup_datadog
+
+# from fastapi_pagination import add_pagination as setup_pagination
+
 
 logger = logging.getLogger(__name__)
 setup_datadog()

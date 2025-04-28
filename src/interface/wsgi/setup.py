@@ -14,7 +14,11 @@ patch_all()
 if PROJECT_ENVS.ENV_STATE not in [Envs.PROD.value, Envs.STAGING.value]:
     tracer.enabled = False
 else:
-    tracer.configure(hostname=PROJECT_ENVS.DD_AGENT_HOST, port=PROJECT_ENVS.DD_TRACE_AGENT_PORT, https=False)
+    tracer.configure(
+        hostname=PROJECT_ENVS.DD_AGENT_HOST,
+        port=PROJECT_ENVS.DD_TRACE_AGENT_PORT,
+        https=False,
+    )
 
 
 def _get_fastapi_sessionmaker() -> FastAPISessionMaker:
@@ -26,4 +30,7 @@ def get_db() -> Iterator[Session]:
 
 
 def setup_datadog() -> None:
-    initialize(statsd_host=PROJECT_ENVS.DD_AGENT_HOST, statsd_port=PROJECT_ENVS.DD_TRACE_AGENT_PORT)
+    initialize(
+        statsd_host=PROJECT_ENVS.DD_AGENT_HOST,
+        statsd_port=PROJECT_ENVS.DD_TRACE_AGENT_PORT,
+    )

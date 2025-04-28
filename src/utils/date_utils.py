@@ -53,5 +53,6 @@ class DateUtils:
         months = math.ceil((datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S") - today).days / 30)
         return months
 
+
 if __name__ == "__main__":
     print(DateUtils.months_until_date("2023-10-25T00:00:00"))

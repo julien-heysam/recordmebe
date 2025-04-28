@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String
 
-from src.db.db import Base
 from src.db.base import BaseColumns
+from src.db.db import Base
 
 
 class OrgTable(BaseColumns, Base):

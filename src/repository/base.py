@@ -31,7 +31,11 @@ class BaseRepository:
             self.db_session.commit()
             return data
         except SQLAlchemyError as e:
-            logger.error(f"Database error occurred: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                f"Database error occurred: {e}",
+                extra={"error": e},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             self.db_session.rollback()
             return None
 
@@ -40,7 +44,11 @@ class BaseRepository:
             db_record = self.db_session.query(self.model_table).filter(self.model_table.id == _id).first()
             return self.alembic_to_pydantic(db_record)
         except SQLAlchemyError as e:
-            logger.error(f"Database error occurred: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                f"Database error occurred: {e}",
+                extra={"error": e},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             return None
 
     def update(self, _id: str, data: BaseModel | dict, fields: list[str] = None) -> BaseModel:
@@ -60,7 +68,11 @@ class BaseRepository:
                 return self.alembic_to_pydantic(db_record)
             return None
         except SQLAlchemyError as e:
-            logger.error(f"Database error occurred: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                f"Database error occurred: {e}",
+                extra={"error": e},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             self.db_session.rollback()
             return None
 
@@ -70,6 +82,10 @@ class BaseRepository:
             self.db_session.commit()
             return row_count
         except SQLAlchemyError as e:
-            logger.error(f"Database error occurred: {e}", extra={"error": e}, exc_info=PROJECT_ENVS.DEBUG)
+            logger.error(
+                f"Database error occurred: {e}",
+                extra={"error": e},
+                exc_info=PROJECT_ENVS.DEBUG,
+            )
             self.db_session.rollback()
             return 0
