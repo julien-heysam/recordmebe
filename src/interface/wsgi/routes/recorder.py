@@ -33,7 +33,7 @@ def get(org_id: str, email: str, db: Session = Depends(get_db)):
 
 
 @recorder_route.post(
-    "/", response_model=UserSchema, status_code=status.HTTP_201_CREATED, response_description="Create a new recording"
+    "/", response_model=UserSchema, response_description="Create a new recording"
 )
 def post(model: UserSchema, db: Session = Depends(get_db)):
     try:

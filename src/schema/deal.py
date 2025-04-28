@@ -5,6 +5,8 @@ from src.schema.base import BaseSchema
 
 
 class DealSchema(BaseSchema):
+    org_id: Optional[str] = None
+
     name: str
     status: Statues = Statues.ACTIVE.value
     domain: Optional[str] = None

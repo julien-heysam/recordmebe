@@ -27,7 +27,7 @@ def get_startup(request: Request):
     - Returns `503 Service Unavailable` if startup is incomplete.
     """
     try:
-        _ = request.app.state  # Accessing app state to check if it's initialized
+        _ = request.app.state
         return JSONResponse(content={"status": "OK"}, status_code=status.HTTP_200_OK)
     except Exception as e:
         logger.warning(f"Startup incomplete: {e}")
